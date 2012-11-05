@@ -7,8 +7,8 @@ register = template.Library()
 
 @register.filter
 def textile_pl(node):
-    return mark_safe(textile.textile_pl(node))
+    return mark_safe(textilepl.textile_pl(node))
 
 @register.filter
 def textile_restricted_pl(node):
-    return mark_safe(textile.textile_restricted_pl(node))
+    return mark_safe(textilepl.textile_restricted_pl(node))
