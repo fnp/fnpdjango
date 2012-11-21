@@ -27,8 +27,18 @@ setup(
     author_email='radoslaw.czajka@nowoczesnapolska.org.pl',
     url = '',
     packages=find_packages(),
-    package_data={'fnpdjango': whole_trees('fnpdjango', 
-            ['templates', 'locale'])},
+    package_data={'fnpdjango':
+        whole_trees('fnpdjango', ['templates', 'locale']) + 
+        whole_trees('fnpdjango/deploy', ['templates'])
+    },
+    scripts=[
+        'bin/git-archive-all.sh',
+        'bin/fnpdjango_bootstrap.sh',
+    ],
+    install_requires=[
+        'django>=1.4,<1.5',
+        'textile',
+    ],
     license='LICENSE',
     description='.',
     long_description="",

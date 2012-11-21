@@ -1,0 +1,17 @@
+server {
+    listen   [::]:80;
+    listen   80;
+    server_name %(project_name)s.nowoczesnapolska.org.pl?;
+    access_log  %(app_path)s/log/nginx.log;
+    error_log  %(app_path)s/log/nginx-error.log;
+
+    root %(path)s;
+    location /media/ {
+    }
+    location /static/ {
+    }
+    location / {
+        include /etc/nginx/proxy.conf;
+        proxy_pass http://unix:/tmp/gunicorn-%(project_name)s.socket;
+    }
+}

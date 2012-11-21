@@ -1,0 +1,14 @@
+CONFIG = {
+    'mode': 'wsgi',
+    'working_dir': '%(app_path)s/releases/current/%(project_name)s',
+    'python': '%(app_path)s/ve/bin/python',
+    'user': '%(user)s',
+    'group': '%(user)s',
+    'args': (
+        '--bind=unix:/tmp/gunicorn-%(project_name)s.socket',
+        '--workers=1',
+        '--timeout=180',
+        'wsgi:application',
+        '--access-logfile=%(app_path)s/log/gunicorn.log',
+    ),
+}
