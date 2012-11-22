@@ -1,0 +1,3 @@
+recursive-include fnpdjango/templates *.txt *.html
+recursive-include fnpdjango/locale *.po *.mo
+recursive-include fnpdjango/deploy/templates *.template

@@ -27,9 +27,9 @@ setup(
     author_email='radoslaw.czajka@nowoczesnapolska.org.pl',
     url = '',
     packages=find_packages(),
-    package_data={'fnpdjango':
-        whole_trees('fnpdjango', ['templates', 'locale']) + 
-        whole_trees('fnpdjango/deploy', ['templates'])
+    package_data={
+        'fnpdjango': whole_trees('fnpdjango', ['templates', 'locale']),
+        'fnpdjango.deploy': ['templates/*.template'],
     },
     scripts=[
         'bin/git-archive-all.sh',
