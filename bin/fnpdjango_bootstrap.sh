@@ -7,6 +7,11 @@ pip install "$DJANGO_REQ"
 django-admin.py startproject \
     --template http://pypi.nowoczesnapolska.org.pl/bootstrap/project.tar.gz \
     "$1"
-chmod +x "$1"/manage.py
-pip install -r "$1"/requirements.txt
-pip install -r "$1"/requirements-dev.txt
+
+cd "$1"
+chmod +x manage.py
+mv "$1"/localsettings.py.default "$1"/localsettings.py
+pip install -r requirements.txt
+pip install -r requirements-dev.txt
+git init
+
