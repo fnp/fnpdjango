@@ -32,7 +32,7 @@ def setup():
     run('mkdir -p %(app_path)s' % env, pty=True)
     run('%(virtualenv)s %(app_path)s/ve' % env, pty=True)
     run('mkdir -p %(app_path)s/releases %(app_path)s/packages' % env, pty=True)
-    run('cd %(app_path)s/releases; ln -s . current; ln -s . previous' % env, pty=True)
+    run('cd %(app_path)s/releases; ln -sfT . current; ln -sfT . previous' % env, pty=True)
     upload_samples()
     print "Fill out db details in localsettings.py and run deploy."
 
@@ -131,7 +131,7 @@ def check_setup():
     try:
         run('[ -e %(app_path)s/ve ]' % env)
     except SystemExit:
-        print "Environment isn't ready. Run fab deploy.setup first."
+        print "Environment isn't ready. Run `fab setup` first."
         raise
 
 def upload_samples():
@@ -145,7 +145,7 @@ def upload_localsettings_sample():
     require('app_path', 'project_name')
     template = '%(project_name)s/localsettings.py.template'
     if not exists(template):
-        template = join(dirname(abspath(__file__)), 'localsettings.py.template')
+        template = join(dirname(abspath(__file__)), 'templates/localsettings.py.template')
     env.secret_key = '' # sth random
     files.upload_template(template, '%(app_path)s/localsettings.py.sample' % env, env)
 
@@ -155,7 +155,7 @@ def upload_nginx_sample():
     require('app_path', 'project_name')
     template = '%(project_name)s/nginx.template'
     if not exists(template):
-        template = join(dirname(abspath(__file__)), 'nginx.template')
+        template = join(dirname(abspath(__file__)), 'templates/nginx.template')
     files.upload_template(template, '%(app_path)s/nginx.sample' % env, env)
 
 def upload_gunicorn_sample():
@@ -164,7 +164,7 @@ def upload_gunicorn_sample():
     require('app_path', 'project_name')
     template = '%(project_name)s/gunicorn.template'
     if not exists(template):
-        template = join(dirname(abspath(__file__)), 'gunicorn.template')
+        template = join(dirname(abspath(__file__)), 'templates/gunicorn.template')
     files.upload_template(template, '%(app_path)s/gunicorn.sample' % env, env)
 
 def upload_tar_from_git():
