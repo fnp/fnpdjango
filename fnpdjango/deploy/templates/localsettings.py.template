@@ -22,3 +22,6 @@ PIWIK_TOKEN = ''
 
 MEDIA_ROOT = '%(app_path)s/media/'
 STATIC_ROOT = '%(app_path)s/static/'
+
+FNPDJANGO_REALIP = False
+FNPDJANGO_XACCEL = False
