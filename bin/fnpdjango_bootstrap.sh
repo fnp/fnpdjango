@@ -1,7 +1,11 @@
 #!/bin/bash
 
-DJANGO_REQ='django>=1.4,<1.5'
 PROJECT="$1"
+
+# Make it a function, so that it works with `source`
+start_project() {
+
+DJANGO_REQ='Django>=1.4,<1.5'
 VIRTUALENVWRAPPER_PATHS="
     /etc/bash_completion.d/virtualenvwrapper
     /usr/bin/virtualenvwrapper.sh
@@ -10,16 +14,16 @@ VIRTUALENVWRAPPER_PATHS="
 
 # Colorful output.
 strong='\e[0;32m'
+error='\e[1;31m'
 normal='\e[0m'
 
-if [ -z "$PROJECT" ]
-then
-    echo "Usage:"
-    echo "    fnpdjango_bootstrap.sh <project_name>"
-    echo "or:"
-    echo "    wget <remote_path> -O-|bash /dev/stdin edumedfnpdjango_bootstrap.sh <project_name>"
-fi
-
+echo "Create new Django project."
+while [ -z "$PROJECT" ]
+do
+    echo "Name of the project:"
+    read PROJECT
+done
+echo -e "Project: ${strong}${PROJECT}${normal}"
 
 for venv in $VIRTUALENVWRAPPER_PATHS
 do
@@ -34,11 +38,11 @@ then
     echo "virtualenvwrapper found at $VIRTUALENVWRAPPER."
     source "$VIRTUALENVWRAPPER"
 else
-    echo "ERROR: virtualenvwrapper not found. Tried locations:"
+    echo -e "${error}ERROR: virtualenvwrapper not found. Tried locations:${normal}"
     echo "$VIRTUALENVWRAPPER_PATHS"
-    echo "Install virtualenvwrapper or add the correct path to this script."
+    echo -e "${error}Install virtualenvwrapper or add the correct path to this script.${normal}"
     echo "Aborting."
-    exit
+    return
 fi
 
 echo -e "${strong}Creating virtualenv: $PROJECT...${normal}"
@@ -53,7 +57,7 @@ django-admin.py startproject \
 
 cd "$PROJECT"
 chmod +x manage.py
-mv "$1"/localsettings.py.default "$PROJECT"/localsettings.py
+mv "$PROJECT"/localsettings.py.default "$PROJECT"/localsettings.py
 
 echo -e "${strong}Installing requirements...${normal}"
 pip install -r requirements.txt
@@ -62,3 +66,10 @@ pip install -r requirements-dev.txt
 echo -e "${strong}Starting new git repository...${normal}"
 git init
 
+echo -e "${strong}What next?${normal}"
+echo " * Work on your app, commit to git."
+echo " * Review fabfile, use fab for deployment."
+
+
+}
+start_project
