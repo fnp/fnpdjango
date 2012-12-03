@@ -63,6 +63,9 @@ echo -e "${strong}Installing requirements...${normal}"
 pip install -r requirements.txt
 echo -e "${strong}Installing developer requirements...${normal}"
 pip install -r requirements-dev.txt
+echo -e "${strong}Running syncdb...${normal}"
+./manage.py syncdb --noinput
+
 echo -e "${strong}Starting new git repository...${normal}"
 git init
 

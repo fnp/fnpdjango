@@ -108,7 +108,7 @@ class DebianGunicorn(Task):
     def run(self):
         print '>>> restart webserver using gunicorn-debian'
         with path('/sbin'):
-            sudo('gunicorn-debian restart %s' % self.site_name, shell=False)
+            sudo('gunicorn-debian restart %s' % self.name, shell=False)
 
 class Apache(Task):
     def run(self):
@@ -209,7 +209,7 @@ def migrate():
     "Update the database"
     print '>>> migrate'
     require('app_path', 'project_name')
-    with cd('%(app_path)s/releases/current/%(project_name)s' % env):
+    with cd('%(app_path)s/releases/current' % env):
         run('%(app_path)s/ve/bin/python manage.py syncdb --noinput' % env, pty=True)
         run('%(app_path)s/ve/bin/python manage.py migrate' % env, pty=True)
 
@@ -217,5 +217,5 @@ def collectstatic():
     """Collect static files"""
     print '>>> collectstatic'
     require('app_path', 'project_name')
-    with cd('%(app_path)s/releases/current/%(project_name)s' % env):
+    with cd('%(app_path)s/releases/current' % env):
         run('%(app_path)s/ve/bin/python manage.py collectstatic --noinput' % env, pty=True)
