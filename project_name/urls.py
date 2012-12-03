@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
 
-urlpatterns += patterns('',
+urlpatterns = patterns('',
     # Examples:
     # url(r'^$', '{{ project_name }}.views.home', name='home'),
     # url(r'^{{ project_name }}/', include('foo.urls')),
