@@ -36,9 +36,9 @@ def get_here_url(request, lang):
             match = resolve(request.get_full_path())
         except Resolver404:
             match = resolve('/')
-        view = match.url_name
+        view = match.func
         if view is None:
-            view = match.func
+            view = match.url_name
         if lang is None:
             lang = translation.get_language()
         with translation.override(lang):
