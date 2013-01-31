@@ -107,8 +107,7 @@ class DebianGunicorn(Task):
 
     def run(self):
         print '>>> restart webserver using gunicorn-debian'
-        with path('/sbin'):
-            sudo('gunicorn-debian restart %s' % self.name, shell=False)
+        sudo('gunicorn-debian restart %s' % self.name, shell=False)
 
 class Apache(Task):
     def run(self):
@@ -123,8 +122,7 @@ class Supervisord(Task):
 
     def run(self):
         print '>>> supervisord: restart %s' % self.name
-        with path('/sbin'):
-            sudo('supervisorctl restart %s' % self.name, shell=False)
+        sudo('supervisorctl restart %s' % self.name, shell=False)
 
 def check_setup():
     require('app_path')
