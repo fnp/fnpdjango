@@ -2,7 +2,7 @@
     {% load i18n %}
     <a class="previous_page" 
         {% if number %}
-            href="?page={{ get_dict }}"
+            href="?{{ get_dict }}"
         {% else %}
             href="{{ url }}"
         {% endif %}
