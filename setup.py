@@ -30,6 +30,7 @@ setup(
     package_data={
         'fnpdjango': whole_trees('fnpdjango', ['templates', 'locale']),
         'fnpdjango.deploy': ['templates/*.template'],
+        'fnpdjango.management.commands': ['babel.cfg'],
     },
     scripts=[
         'bin/git-archive-all.sh',
