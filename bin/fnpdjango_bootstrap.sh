@@ -5,7 +5,7 @@ PROJECT="$1"
 # Make it a function, so that it works with `source`
 start_project() {
 
-DJANGO_REQ='Django>=1.4,<1.5'
+DJANGO_REQ='Django>=1.5,<1.6'
 VIRTUALENVWRAPPER_PATHS="
     /etc/bash_completion.d/virtualenvwrapper
     /usr/bin/virtualenvwrapper.sh

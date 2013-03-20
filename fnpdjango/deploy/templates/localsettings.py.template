@@ -17,6 +17,10 @@ DATABASES = {
 }
 
 SECRET_KEY = '%(secret_key)s'
+ALLOWED_HOSTS = (
+    '%(project_name).nowoczesnapolska.org.pl',
+)
+
 PIWIK_URL = 'http://piwik.nowoczesnapolska.org.pl/'
 PIWIK_TOKEN = ''
 
