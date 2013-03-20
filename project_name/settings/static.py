@@ -1,3 +1,6 @@
+from os import path
+
+
 MEDIA_ROOT = path.join(PROJECT_DIR, 'media/')
 MEDIA_URL = '/media/'
 STATIC_ROOT = path.join(PROJECT_DIR, 'static/')

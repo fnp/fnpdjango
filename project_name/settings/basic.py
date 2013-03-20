@@ -1,3 +1,7 @@
+from os import path
+from . import PROJECT_DIR
+
+
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 

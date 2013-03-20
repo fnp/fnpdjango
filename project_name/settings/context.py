@@ -1,3 +1,6 @@
+from . import INSTALLED_APPS
+
+
 TEMPLATE_CONTEXT_PROCESSORS = tuple(x for x in (
     "django.contrib.auth.context_processors.auth"
             if "django.contrib.auth" in INSTALLED_APPS else None,

@@ -1,6 +1,6 @@
 -i http://pypi.nowoczesnapolska.org.pl/simple
 
-Django>=1.4,<1.5
+Django>=1.5,<1.6
 South>=0.7.4
 django-pipeline>=1.2,<1.3
 piwik
