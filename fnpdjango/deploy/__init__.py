@@ -12,8 +12,8 @@ Then set up some env properties:
     services: list of tasks to run after deployment
 
 """
-from fabric.api import *
 from os.path import abspath, dirname, exists, join
+from fabric.api import *
 from fabric.contrib import files
 from fabric.tasks import Task, execute
 
@@ -31,7 +31,7 @@ def setup():
 
     run('mkdir -p %(app_path)s' % env, pty=True)
     run('%(virtualenv)s %(app_path)s/ve' % env, pty=True)
-    run('mkdir -p %(app_path)s/releases %(app_path)s/packages' % env, pty=True)
+    run('mkdir -p %(app_path)s/releases %(app_path)s/packages %(app_path)s/log' % env, pty=True)
     run('cd %(app_path)s/releases; ln -sfT . current; ln -sfT . previous' % env, pty=True)
     upload_samples()
     print "Fill out db details in localsettings.py and run deploy."
@@ -199,7 +199,7 @@ def symlink_current_release():
     print '>>> symlink current release'
     require('release', provided_by=[deploy])
     require('app_path')
-    with cd(env.path):
+    with cd(env.app_path):
         run('rm releases/previous; mv releases/current releases/previous')
         run('ln -s %(release)s releases/current' % env)
 

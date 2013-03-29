@@ -10,5 +10,6 @@ CONFIG = {
         '--timeout=180',
         'wsgi:application',
         '--access-logfile=%(app_path)s/log/gunicorn.log',
+        '--error-logfile=%(app_path)s/log/gunicorn-error.log'.
     ),
 }

@@ -5,7 +5,7 @@ server {
     access_log  %(app_path)s/log/nginx.log;
     error_log  %(app_path)s/log/nginx-error.log;
 
-    root %(path)s;
+    root %(app_path)s;
     location /media/ {
     }
     location /static/ {
