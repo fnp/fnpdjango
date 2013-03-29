@@ -13,6 +13,7 @@ Then set up some env properties:
 
 """
 from os.path import abspath, dirname, exists, join
+from django.utils.crypto import get_random_string
 from fabric.api import *
 from fabric.contrib import files
 from fabric.tasks import Task, execute
@@ -144,7 +145,7 @@ def upload_localsettings_sample():
     template = '%(project_name)s/localsettings.py.template'
     if not exists(template):
         template = join(dirname(abspath(__file__)), 'templates/localsettings.py.template')
-    env.secret_key = '' # sth random
+    env.secret_key = get_random_string(50)
     files.upload_template(template, '%(app_path)s/localsettings.py.sample' % env, env)
 
 def upload_nginx_sample():

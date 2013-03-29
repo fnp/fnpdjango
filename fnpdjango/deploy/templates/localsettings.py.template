@@ -27,5 +27,7 @@ PIWIK_TOKEN = ''
 MEDIA_ROOT = '%(app_path)s/media/'
 STATIC_ROOT = '%(app_path)s/static/'
 
-FNPDJANGO_REALIP = False
-FNPDJANGO_XACCEL = False
+
+# Those should be set to True if you are behind Nginx.
+FNPDJANGO_REALIP = True
+FNPDJANGO_XACCEL = True
