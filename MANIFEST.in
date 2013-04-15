@@ -2,3 +2,4 @@ include *.txt
 recursive-include fnpdjango/templates *.html
 recursive-include fnpdjango/locale *.po *.mo
 recursive-include fnpdjango/deploy/templates *.template
+include fnpdjango/management/commands/babel.cfg

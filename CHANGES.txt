@@ -1,3 +1,5 @@
+    - Fix makecontribmessages command.
+
 v0.1.6  2013-03-20
     - Update to Django 1.5
 
