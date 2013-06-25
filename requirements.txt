@@ -10,3 +10,5 @@ piwik
 
 django_cas>=2.1,<2.2
 fnpdjango<0.2
+
+ipython
