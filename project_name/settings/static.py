@@ -1,4 +1,5 @@
 from os import path
+from paths import PROJECT_DIR
 
 
 MEDIA_ROOT = path.join(PROJECT_DIR, 'media/')
