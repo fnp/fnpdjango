@@ -57,7 +57,7 @@ django-admin.py startproject \
 
 cd "$PROJECT"
 chmod +x manage.py
-mv "$PROJECT"/localsettings.py.default "$PROJECT"/localsettings.py
+mv "$PROJECT"/localsettings.py.dev "$PROJECT"/localsettings.py
 
 echo -e "${strong}Installing requirements...${normal}"
 pip install -r requirements.txt
