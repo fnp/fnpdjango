@@ -37,7 +37,7 @@ def setup():
     if not files.exists(env.app_path):
         run('mkdir -p %(app_path)s' % env, pty=True)
     with cd(env.app_path):
-        for subdir in 'releases', 'packages', 'log':
+        for subdir in 'releases', 'packages', 'log', 'samples':
             if not files.exists(subdir):
                 run('mkdir -p %s' % subdir, pty=True)
     with cd('%(app_path)s/releases' % env):
@@ -173,7 +173,7 @@ def upload_samples():
 
 def upload_sample(name):
     require('app_path', 'project_name')
-    upload_path = '%(app_path)s/' % env + name + '.sample'
+    upload_path = '%(app_path)s/samples/' % env + name + '.sample'
     if files.exists(upload_path):
         return
     print '>>> upload %s template' % name
