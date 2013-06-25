@@ -25,17 +25,28 @@ env.services = None
 @task
 def setup():
     """
-    Setup a fresh virtualenv as well as a few useful directories.
-    virtualenv should be already installed.
+    Setup all needed directories.
     """
-    require('hosts', 'app_path', 'virtualenv')
+    require('hosts', 'app_path')
 
-    run('mkdir -p %(app_path)s' % env, pty=True)
-    run('%(virtualenv)s %(app_path)s/ve' % env, pty=True)
-    run('mkdir -p %(app_path)s/releases %(app_path)s/packages %(app_path)s/log' % env, pty=True)
-    run('cd %(app_path)s/releases; ln -sfT . current; ln -sfT . previous' % env, pty=True)
+    if not files.exists(env.app_path):
+        run('mkdir -p %(app_path)s' % env, pty=True)
+    with cd(env.app_path):
+        for subdir in 'releases', 'packages', 'log':
+            if not files.exists(subdir):
+                run('mkdir -p %s' % subdir, pty=True)
+    with cd('%(app_path)s/releases' % env):
+        if not files.exists('current'):
+            run('ln -sfT . current', pty=True)
+        if not files.exists('previous'):
+            run('ln -sfT . previous', pty=True)
+    
     upload_samples()
-    print "Fill out db details in localsettings.py and run deploy."
+
+
+def check_localsettings():
+    if not files.exists('%(app_path)s/localsettings.py' % env):
+        abort('localsettings.py file missing.')
 
 
 @task(default=True)
@@ -50,10 +61,11 @@ def deploy():
     import time
     env.release = time.strftime('%Y-%m-%dT%H%M')
 
-    check_setup()
+    setup()
+    check_localsettings()
     upload_tar_from_git()
-    install_requirements()
     copy_localsettings()
+    install_requirements()
     symlink_current_release()
     migrate()
     collectstatic()
@@ -101,7 +113,12 @@ def restart():
 # =====================================================================
 # = Helpers. These are called by other functions rather than directly =
 # =====================================================================
-class DebianGunicorn(Task):
+
+class Service(Task):
+    def upload_sample(self):
+        pass
+
+class DebianGunicorn(Service):
     def __init__(self, name):
         super(Task, self).__init__()
         self.name = name
@@ -110,13 +127,16 @@ class DebianGunicorn(Task):
         print '>>> restart webserver using gunicorn-debian'
         sudo('gunicorn-debian restart %s' % self.name, shell=False)
 
-class Apache(Task):
+    def upload_sample(self):
+        upload_sample('gunicorn')
+
+class Apache(Service):
     def run(self):
         print '>>> restart webserver by touching WSGI'
         with path('/sbin'):
             run('touch %(app_path)s/%(project_name)s/wsgi.py' % env)
 
-class Supervisord(Task):
+class Supervisord(Service):
     def __init__(self, name):
         super(Task, self).__init__()
         self.name = name
@@ -125,46 +145,29 @@ class Supervisord(Task):
         print '>>> supervisord: restart %s' % self.name
         sudo('supervisorctl restart %s' % self.name, shell=False)
 
-def check_setup():
-    require('app_path')
-    try:
-        run('[ -e %(app_path)s/ve ]' % env)
-    except SystemExit:
-        print "Environment isn't ready. Run `fab setup` first."
-        raise
-
 def upload_samples():
     upload_localsettings_sample()
     upload_nginx_sample()
-    upload_gunicorn_sample()
+    for service in env.services:
+        service.upload_sample()
+
+def upload_sample(name):
+    require('app_path', 'project_name')
+    upload_path = '%(app_path)s/' % env + name + '.sample'
+    if files.exists(upload_path):
+        return
+    print '>>> upload %s template' % name
+    template = '%(project_name)s/' % env + name + '.template'
+    if not exists(template):
+        template = join(dirname(abspath(__file__)), 'templates/' + name + '.template')
+    files.upload_template(template, upload_path, env)
 
 def upload_localsettings_sample():
     "Fill out localsettings template and upload as a sample."
-    print '>>> upload localsettings template'
-    require('app_path', 'project_name')
-    template = '%(project_name)s/localsettings.py.template'
-    if not exists(template):
-        template = join(dirname(abspath(__file__)), 'templates/localsettings.py.template')
     env.secret_key = get_random_string(50)
-    files.upload_template(template, '%(app_path)s/localsettings.py.sample' % env, env)
+    upload_sample('localsettings.py')
 
-def upload_nginx_sample():
-    "Fill out nginx conf template and upload as a sample."
-    print '>>> upload nginx template'
-    require('app_path', 'project_name')
-    template = '%(project_name)s/nginx.template'
-    if not exists(template):
-        template = join(dirname(abspath(__file__)), 'templates/nginx.template')
-    files.upload_template(template, '%(app_path)s/nginx.sample' % env, env)
-
-def upload_gunicorn_sample():
-    "Fill out gunicorn conf template and upload as a sample."
-    print '>>> upload gunicorn template'
-    require('app_path', 'project_name')
-    template = '%(project_name)s/gunicorn.template'
-    if not exists(template):
-        template = join(dirname(abspath(__file__)), 'templates/gunicorn.template')
-    files.upload_template(template, '%(app_path)s/gunicorn.sample' % env, env)
+upload_nginx_sample = lambda: upload_sample('nginx')
 
 def upload_tar_from_git():
     "Create an archive from the current Git branch and upload it"
@@ -184,7 +187,22 @@ def install_requirements():
     print '>>> install requirements'
     require('release', provided_by=[deploy])
     require('app_path')
-    run('cd %(app_path)s; ve/bin/pip install -r %(app_path)s/releases/%(release)s/requirements.txt' % env, pty=True)
+    if not files.exists('%(app_path)s/ve' % env):
+        require('virtualenv')
+        run('%(virtualenv)s %(app_path)s/ve' % env, pty=True)
+    with cd('%(app_path)s/releases/%(release)s' % env):
+        run('%(app_path)s/ve/bin/pip install -r requirements.txt' % env, pty=True)
+        # Install DB requirement
+        database_reqs = {
+            'django.db.backends.postgresql_psycopg2': 'psycopg2',
+            'django.db.backends.mysql': 'MySQL-python',
+        }
+        databases = run('''DJANGO_SETTINGS_MODULE=%(project_name)s.settings %(app_path)s/ve/bin/python -c 'from django.conf import settings;              print " ".join(set([d["ENGINE"] for d in settings.DATABASES.values()]))' ''' % env)
+        for database in databases.split():
+            if database in database_reqs:
+                # TODO: set pip default pypi
+                run('%(app_path)s/ve/bin/pip install ' % env + database_reqs[database])
+
 
 def copy_localsettings():
     "Copy localsettings.py from root directory to release directory (if this file exists)"
