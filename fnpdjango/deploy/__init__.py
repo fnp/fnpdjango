@@ -13,6 +13,9 @@ Then set up some env properties:
     django_root_path (optional): path to the directory
         containing django project, relative to the
         root of the repository (defaults to '.')
+    localsettings_dst_path (optional): path indicating
+        where to copy the localsettings file, relative
+        to django_root_path (defaults to project_name/localsettings.py)
 """
 from os.path import abspath, dirname, exists, join
 from django.utils.crypto import get_random_string
@@ -214,7 +217,7 @@ def copy_localsettings():
     require('app_path', 'project_name')
 
     with settings(warn_only=True):
-        copy_to = join(get_django_root_path(env['release']), env['project_name'])
+        copy_to = join(get_django_root_path(env['release']), env.get('localsettings_dst_path', env['project_name']))
         run('cp %(app_path)s/localsettings.py ' % env + copy_to)
 
 def symlink_current_release():
