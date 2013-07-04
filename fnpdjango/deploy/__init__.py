@@ -10,7 +10,9 @@ Then set up some env properties:
     user: remote user name
     app_path: where does the app go
     services: list of tasks to run after deployment
-
+    django_root_path (optional): path to the directory
+        containing django project, relative to the
+        root of the repository (defaults to '.')
 """
 from os.path import abspath, dirname, exists, join
 from django.utils.crypto import get_random_string
@@ -192,6 +194,7 @@ def install_requirements():
         run('%(virtualenv)s %(app_path)s/ve' % env, pty=True)
     with cd('%(app_path)s/releases/%(release)s' % env):
         run('%(app_path)s/ve/bin/pip install -r requirements.txt' % env, pty=True)
+    with cd(get_django_root_path(env['release'])):
         # Install DB requirement
         database_reqs = {
             'django.db.backends.postgresql_psycopg2': 'psycopg2',
@@ -211,7 +214,8 @@ def copy_localsettings():
     require('app_path', 'project_name')
 
     with settings(warn_only=True):
-        run('cp %(app_path)s/localsettings.py %(app_path)s/releases/%(release)s/%(project_name)s' % env)
+        copy_to = join(get_django_root_path(env['release']), env['project_name'])
+        run('cp %(app_path)s/localsettings.py ' % env + copy_to)
 
 def symlink_current_release():
     "Symlink our current release"
@@ -226,7 +230,7 @@ def migrate():
     "Update the database"
     print '>>> migrate'
     require('app_path', 'project_name')
-    with cd('%(app_path)s/releases/current' % env):
+    with cd(get_django_root_path('current')):
         run('%(app_path)s/ve/bin/python manage.py syncdb --noinput' % env, pty=True)
         run('%(app_path)s/ve/bin/python manage.py migrate' % env, pty=True)
 
@@ -234,5 +238,13 @@ def collectstatic():
     """Collect static files"""
     print '>>> collectstatic'
     require('app_path', 'project_name')
-    with cd('%(app_path)s/releases/current' % env):
+    with cd(get_django_root_path('current')):
         run('%(app_path)s/ve/bin/python manage.py collectstatic --noinput' % env, pty=True)
+
+
+def get_django_root_path(release):
+    require('app_path')
+    path = '%(app_path)s/releases/%(release)s' % dict(app_path = env['app_path'], release = release)
+    if 'django_root_path' in env:
+        path = join(path, env['django_root_path'])
+    return path
