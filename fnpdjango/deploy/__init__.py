@@ -151,6 +151,20 @@ class Supervisord(Service):
         print '>>> supervisord: restart %s' % self.name
         sudo('supervisorctl restart %s' % self.name, shell=False)
 
+class Command(Task):
+    def __init__(self, commands, working_dir):
+        if not hasattr(commands, '__iter__'):
+            commands = [commands]
+        self.name = 'Command: %s @ %s' % (commands, working_dir)
+        self.commands = commands
+        self.working_dir = working_dir
+
+    def run(self):
+        require('app_path')
+        with cd(join('%(app_path)s/releases/current' % env, self.working_dir)):
+            for command in self.commands:
+                run(command)
+
 def upload_samples():
     upload_localsettings_sample()
     upload_nginx_sample()
