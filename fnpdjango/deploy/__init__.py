@@ -73,6 +73,7 @@ def deploy():
     install_requirements()
     symlink_current_release()
     migrate()
+    pre_collectstatic()
     collectstatic()
     restart()
 
@@ -236,6 +237,11 @@ def migrate():
     with cd(get_django_root_path('current')):
         run('%(app_path)s/ve/bin/python manage.py syncdb --noinput' % env, pty=True)
         run('%(app_path)s/ve/bin/python manage.py migrate' % env, pty=True)
+
+def pre_collectstatic():
+    print '>>> pre_collectstatic'
+    for task in env.get('pre_collectstatic', []):
+        execute(task)
 
 def collectstatic():
     """Collect static files"""
