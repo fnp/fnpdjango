@@ -7,7 +7,7 @@ start_project() {
 
 DJANGO_REQ='Django>=1.5,<1.6'
 DJANGO_ROOT='src'
-PROJECT_TEMPLATE='http://git.nowoczesnapolska.org.pl/?p=fnpdjango.git;a=snapshot;h=8b4c794ea9a4783ad95f412925aa33e7b3da5375;sf=tgz'
+PROJECT_TEMPLATE='http://git.nowoczesnapolska.org.pl/?p=fnpdjango.git;a=snapshot;h=64c636d1e3ff35a7a1d3394fd1d3ff0093f44aa2;sf=tgz'
 VIRTUALENVWRAPPER_PATHS="
     /etc/bash_completion.d/virtualenvwrapper
     /usr/bin/virtualenvwrapper.sh
@@ -58,8 +58,13 @@ django-admin.py startproject \
     "$PROJECT"
 
 cd "$PROJECT"
+
+WRAPPER="`ls`"
+mv "$WRAPPER/"* "$WRAPPER/".gitignore .
+rmdir "$WRAPPER"
+
 chmod +x "$DJANGO_ROOT"/manage.py
-mv "$DJANGO_ROOT/$PROJECT/localsettings.py.dev "$DJANGO_ROOT/$PROJECT/localsettings.py
+mv "$DJANGO_ROOT/$PROJECT/localsettings.py.dev" "$DJANGO_ROOT/$PROJECT/localsettings.py"
 
 echo -e "${strong}Installing requirements...${normal}"
 pip install -r requirements.txt
