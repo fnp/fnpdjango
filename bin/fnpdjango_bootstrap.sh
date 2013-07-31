@@ -6,6 +6,8 @@ PROJECT="$1"
 start_project() {
 
 DJANGO_REQ='Django>=1.5,<1.6'
+DJANGO_ROOT='src'
+PROJECT_TEMPLATE='http://git.nowoczesnapolska.org.pl/?p=fnpdjango.git;a=snapshot;h=8b4c794ea9a4783ad95f412925aa33e7b3da5375;sf=tgz'
 VIRTUALENVWRAPPER_PATHS="
     /etc/bash_completion.d/virtualenvwrapper
     /usr/bin/virtualenvwrapper.sh
@@ -52,19 +54,19 @@ pip install "$DJANGO_REQ"
 
 echo -e "${strong}Starting the project...${normal}"
 django-admin.py startproject \
-    --template http://pypi.nowoczesnapolska.org.pl/bootstrap/project.tar.gz \
+    --template "$PROJECT_TEMPLATE" \
     "$PROJECT"
 
 cd "$PROJECT"
-chmod +x manage.py
-mv "$PROJECT"/localsettings.py.dev "$PROJECT"/localsettings.py
+chmod +x "$DJANGO_ROOT"/manage.py
+mv "$DJANGO_ROOT/$PROJECT/localsettings.py.dev "$DJANGO_ROOT/$PROJECT/localsettings.py
 
 echo -e "${strong}Installing requirements...${normal}"
 pip install -r requirements.txt
 echo -e "${strong}Installing developer requirements...${normal}"
 pip install -r requirements-dev.txt
 echo -e "${strong}Running syncdb...${normal}"
-./manage.py syncdb --noinput
+"$DJANGO_ROOT"/manage.py syncdb --noinput
 
 echo -e "${strong}Starting new git repository...${normal}"
 git init
