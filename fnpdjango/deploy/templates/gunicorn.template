@@ -1,6 +1,6 @@
 CONFIG = {
     'mode': 'wsgi',
-    'working_dir': '%(app_path)s/releases/current',
+    'working_dir': '%(app_path)s/releases/current/%(django_root_path)s',
     'python': '%(app_path)s/ve/bin/python',
     'user': '%(user)s',
     'group': '%(user)s',
