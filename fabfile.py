@@ -7,3 +7,5 @@ env.app_path = '/srv/{{ project_name }}'
 env.services = [
     DebianGunicorn('{{ project_name }}'),
 ]
+env.django_root_path = 'src'
+
