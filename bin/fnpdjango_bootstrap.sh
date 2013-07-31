@@ -1,4 +1,10 @@
 #!/bin/bash
+#
+# Use as: 
+#
+#   source <(curl -L pypi.nowoczesnapolska.org.pl/django)
+#
+
 
 PROJECT="$1"
 
