@@ -1,6 +1,6 @@
 CONFIG = {
     'mode': 'wsgi',
-    'working_dir': '%(app_path)s/releases/current/%(project_name)s',
+    'working_dir': '%(app_path)s/releases/current',
     'python': '%(app_path)s/ve/bin/python',
     'user': '%(user)s',
     'group': '%(user)s',
@@ -8,8 +8,8 @@ CONFIG = {
         '--bind=unix:/tmp/gunicorn-%(project_name)s.socket',
         '--workers=1',
         '--timeout=180',
-        'wsgi:application',
+        '%(project_name)s.wsgi:application',
         '--access-logfile=%(app_path)s/log/gunicorn.log',
-        '--error-logfile=%(app_path)s/log/gunicorn-error.log'.
+        '--error-logfile=%(app_path)s/log/gunicorn-error.log',
     ),
 }
