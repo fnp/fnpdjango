@@ -2,9 +2,9 @@ from os import path
 from paths import PROJECT_DIR
 
 
-MEDIA_ROOT = path.join(PROJECT_DIR, 'media/')
+MEDIA_ROOT = path.join(PROJECT_DIR, 'var/media/')
 MEDIA_URL = '/media/'
-STATIC_ROOT = path.join(PROJECT_DIR, 'static/')
+STATIC_ROOT = path.join(PROJECT_DIR, 'var/static/')
 STATIC_URL = '/static/'
 
 STATICFILES_FINDERS = (

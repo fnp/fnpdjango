@@ -1,13 +1,8 @@
 localsettings.py
-dev.sqlite
-*.db
-*.db-journal
+var
 *~
 *.orig
 *.log
-
-# Compress output
-/static
 
 # Python garbage
 *.pyc
@@ -33,7 +28,5 @@ thumbs.db
 # Tags file
 TAGS
 
-media
-search_index
 .sass-cache
 
