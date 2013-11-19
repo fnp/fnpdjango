@@ -39,7 +39,7 @@ def slughifi(value, do_slugify=True, overwrite_char_map={}):
     """
 
     # unicodification
-    if type(value) != UnicodeType:
+    if not isinstance(value, unicode):
         value = unicode(value, 'utf-8', 'ignore')
 
     # overwrite chararcter mapping
