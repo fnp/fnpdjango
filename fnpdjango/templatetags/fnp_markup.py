@@ -7,11 +7,11 @@ register = template.Library()
 
 @register.filter
 def textile_en(node):
-    return mark_safe(textile_en.textile(node))
+    return mark_safe(textile.textile(node))
 
 @register.filter
 def textile_restricted_en(node):
-    return mark_safe(textile_en.textile_restricted(node))
+    return mark_safe(textile.textile_restricted(node))
 
 @register.filter
 def textile_pl(node):
