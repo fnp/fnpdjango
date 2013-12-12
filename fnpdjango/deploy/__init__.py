@@ -16,6 +16,7 @@ Then set up some env properties:
     localsettings_dst_path (optional): path indicating
         where to copy the localsettings file, relative
         to django_root_path (defaults to project_name/localsettings.py)
+    skip_collect_static (optional): if True, Django collectstatic command is not called
 """
 from os.path import abspath, dirname, exists, join
 from django.utils.crypto import get_random_string
@@ -260,6 +261,9 @@ def pre_collectstatic():
 def collectstatic():
     """Collect static files"""
     print '>>> collectstatic'
+    if env.get('skip_collect_static', False):
+        print '... skipped'
+        return
     require('app_path', 'project_name')
     with cd(get_django_root_path('current')):
         run('%(app_path)s/ve/bin/python manage.py collectstatic --noinput' % env, pty=True)
