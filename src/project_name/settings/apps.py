@@ -4,7 +4,7 @@ INSTALLED_APPS = (
     'south',
     'pipeline',
     # Disable, if not using Piwik.
-    'piwik.django',
+    'piwik',
     # Disable, if not using CAS.
     'django_cas',
 

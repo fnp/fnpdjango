@@ -3,6 +3,7 @@
 {% load i18n static %}
 {% load fnp_common fnp_share fnp_lang macros %}
 {% load compressed %}
+{% load piwik_tags %}
 
 {% macro title %}
     {% block title %}{% endblock %}
@@ -27,8 +28,7 @@
     <body>
         {% block "body" %}{% endblock %}
     </div>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.0.min.js" charset="utf-8"></script>
     {% compressed_js 'base' %}
-    {{ piwik_tag|safe }}
+    {% tracking_code %}
     </body>
 </html>

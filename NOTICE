@@ -1,10 +1,8 @@
     
     FNP {{ project_name }}
 
-    Copyright © 2012 Fundacja Nowoczesna Polska <fundacja@nowoczesnapolska.org.pl>
+    Copyright © {{ year }} Fundacja Nowoczesna Polska <fundacja@nowoczesnapolska.org.pl>
     
-    For full list of contributors see AUTHORS file. 
-
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -17,3 +15,9 @@
 
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+This package also bundles:
+
+ * jQuery (src/{{ project_name }}/static/jquery.js),
+   under MIT License, see https://jquery.org/license/
+

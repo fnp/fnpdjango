@@ -27,6 +27,7 @@ PIPELINE_CSS = {
 PIPELINE_JS = {
     'base': {
         'source_filenames': (
+            'jquery.min.js',
         ),
         'output_filename': 'compressed/base.js',
     },
