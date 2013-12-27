@@ -2,7 +2,7 @@
 #
 # Use as: 
 #
-#   source <(curl -L pypi.nowoczesnapolska.org.pl/django)
+#   source <(curl d.nowoczesnapolska.org.pl)
 #
 
 
@@ -11,9 +11,12 @@ PROJECT="$1"
 # Make it a function, so that it works with `source`
 start_project() {
 
-DJANGO_REQ='Django>=1.5,<1.6'
+DJANGO_REQ='Django>=1.6,<1.7'
 DJANGO_ROOT='src'
+
+PYPI='http://pypi.nowoczesnapolska.org.pl/simple'
 PROJECT_TEMPLATE='http://git.nowoczesnapolska.org.pl/?p=fnpdjango.git;a=snapshot;h=64c636d1e3ff35a7a1d3394fd1d3ff0093f44aa2;sf=tgz'
+
 VIRTUALENVWRAPPER_PATHS="
     /etc/bash_completion.d/virtualenvwrapper
     /usr/bin/virtualenvwrapper.sh
@@ -56,26 +59,25 @@ fi
 echo -e "${strong}Creating virtualenv: $PROJECT...${normal}"
 mkvirtualenv "$PROJECT"
 echo -e "${strong}Installing Django...${normal}"
-pip install "$DJANGO_REQ"
+pip install -i "$PYPI" "$DJANGO_REQ"
+pip install -i "$PYPI" --pre django-startproject-plus
 
 echo -e "${strong}Starting the project...${normal}"
-django-admin.py startproject \
+django-startproject.py \
     --template "$PROJECT_TEMPLATE" \
+    --name NOTICE \
+    --extra_context='{"year": "`date +%Y`"}' \
     "$PROJECT"
 
 cd "$PROJECT"
-
-WRAPPER="`ls`"
-mv "$WRAPPER/"* "$WRAPPER/".gitignore .
-rmdir "$WRAPPER"
 
 chmod +x "$DJANGO_ROOT"/manage.py
 mv "$DJANGO_ROOT/$PROJECT/localsettings.py.dev" "$DJANGO_ROOT/$PROJECT/localsettings.py"
 
 echo -e "${strong}Installing requirements...${normal}"
-pip install -r requirements.txt
+pip install -i "$PYPI" -r requirements.txt
 echo -e "${strong}Installing developer requirements...${normal}"
-pip install -r requirements-dev.txt
+pip install -i "$PYPI" -r requirements-dev.txt
 echo -e "${strong}Running syncdb...${normal}"
 "$DJANGO_ROOT"/manage.py syncdb --noinput
 
@@ -89,3 +91,7 @@ echo " * Review fabfile, use fab for deployment."
 
 }
 start_project
+
+# The following is just for displaying it as a webpage:<!--
+#--><style>body{white-space:pre;color:#ddd}</style><h1 style="color:#000;text-align:center;position:fixed;top:0;bottom:0;left:0;right:0;white-space:normal">source &lt;(curl <span id="location"></span>)</h1><script>document.getElementById('location').innerHTML=window.location;</script>
+

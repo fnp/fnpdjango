@@ -22,9 +22,9 @@ def whole_trees(package_dir, paths):
 
 setup(
     name='fnpdjango',
-    version='0.1.10',
+    version='0.1.11',
     author='Radek Czajka',
-    author_email='radoslaw.czajka@nowoczesnapolska.org.pl',
+    author_email='radekczajka@nowoczesnapolska.org.pl',
     url = '',
     packages=find_packages(),
     package_data={
@@ -37,7 +37,7 @@ setup(
         'bin/fnpdjango_bootstrap.sh',
     ],
     install_requires=[
-        'django>=1.4,<1.6',
+        'django>=1.4,<1.7',
         'textile',
     ],
     license='LICENSE',

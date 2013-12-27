@@ -51,8 +51,7 @@ def setup():
 
 
 def check_localsettings():
-    if not files.exists('%(app_path)s/localsettings.py' % env):
-        abort('localsettings.py file missing.')
+    return files.exists('%(app_path)s/localsettings.py' % env)
 
 
 @task(default=True)
@@ -68,7 +67,9 @@ def deploy():
     env.release = time.strftime('%Y-%m-%dT%H%M')
 
     setup()
-    check_localsettings()
+    if not check_localsettings():
+        abort('Setup is complete, but\n    %(app_path)s/localsettings.py\n'
+              'is needed for actual deployment.' % env)
     upload_tar_from_git()
     copy_localsettings()
     install_requirements()
@@ -172,9 +173,9 @@ def upload_samples():
     for service in env.services:
         service.upload_sample()
 
-def upload_sample(name):
+def upload_sample(name, where="samples/"):
     require('app_path', 'project_name')
-    upload_path = '%(app_path)s/samples/' % env + name + '.sample'
+    upload_path = '%s/%s%s.sample' % (env['app_path'], where, name)
     if files.exists(upload_path):
         return
     print '>>> upload %s template' % name
@@ -186,7 +187,7 @@ def upload_sample(name):
 def upload_localsettings_sample():
     "Fill out localsettings template and upload as a sample."
     env.secret_key = get_random_string(50)
-    upload_sample('localsettings.py')
+    upload_sample('localsettings.py', where="")
 
 upload_nginx_sample = lambda: upload_sample('nginx')
 

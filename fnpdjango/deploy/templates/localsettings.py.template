@@ -23,8 +23,8 @@ ALLOWED_HOSTS = (
     '%(project_name)s.nowoczesnapolska.org.pl',
 )
 
-PIWIK_URL = 'http://piwik.nowoczesnapolska.org.pl/'
-PIWIK_TOKEN = ''
+PIWIK_URL = '//piwik.nowoczesnapolska.org.pl/nocas/'
+PIWIK_SITE_ID = -1
 
 MEDIA_ROOT = '%(app_path)s/media/'
 STATIC_ROOT = '%(app_path)s/static/'
