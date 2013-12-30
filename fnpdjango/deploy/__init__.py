@@ -113,7 +113,6 @@ def deploy_version(version):
 
 @task
 def restart():
-    require('services')
     for service in env.services or ():
         execute(service)
 
