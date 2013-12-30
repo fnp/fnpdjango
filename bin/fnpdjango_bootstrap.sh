@@ -15,7 +15,7 @@ DJANGO_REQ='Django>=1.6,<1.7'
 DJANGO_ROOT='src'
 
 PYPI='http://pypi.nowoczesnapolska.org.pl/simple'
-PROJECT_TEMPLATE='http://git.nowoczesnapolska.org.pl/?p=fnpdjango.git;a=snapshot;h=64c636d1e3ff35a7a1d3394fd1d3ff0093f44aa2;sf=tgz'
+PROJECT_TEMPLATE='http://git.nowoczesnapolska.org.pl/?p=fnpdjango.git;a=snapshot;h=95e41c888d219481622111ea0cd7f59b7c47b625;sf=tgz'
 
 VIRTUALENVWRAPPER_PATHS="
     /etc/bash_completion.d/virtualenvwrapper
@@ -70,6 +70,14 @@ django-startproject.py \
     "$PROJECT"
 
 cd "$PROJECT"
+
+# GitWeb adds a top directory to the snapshot, let's remove it.
+if [ ! -e .gitignore ]
+then
+    WRAPPER="`ls`"
+    mv "$WRAPPER/"* "$WRAPPER/".gitignore .
+    rmdir "$WRAPPER"
+fi
 
 chmod +x "$DJANGO_ROOT"/manage.py
 mv "$DJANGO_ROOT/$PROJECT/localsettings.py.dev" "$DJANGO_ROOT/$PROJECT/localsettings.py"
