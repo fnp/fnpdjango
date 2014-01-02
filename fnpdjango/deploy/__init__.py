@@ -18,6 +18,7 @@ Then set up some env properties:
         to django_root_path (defaults to project_name/localsettings.py)
     skip_collect_static (optional): if True, Django collectstatic command is not called
 """
+from subprocess import check_output
 from os.path import abspath, dirname, exists, join
 from django.utils.crypto import get_random_string
 from fabric.api import *
@@ -64,7 +65,7 @@ def deploy():
     require('hosts', 'app_path')
 
     import time
-    env.release = time.strftime('%Y-%m-%dT%H%M')
+    env.release = '%s_%s' % (time.strftime('%Y-%m-%dT%H%M'), check_output(['git', 'rev-parse', 'HEAD']).strip())
 
     setup()
     if not check_localsettings():
