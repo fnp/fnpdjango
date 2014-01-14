@@ -136,7 +136,7 @@ class DebianGunicorn(Service):
         sudo('gunicorn-debian restart %s' % self.name, shell=False)
 
     def upload_sample(self):
-        upload_sample('gunicorn')
+        upload_sample('gunicorn', additional_context = dict(django_root_path = get_django_root_path(env['release'])))
 
 class Apache(Service):
     def run(self):
@@ -173,7 +173,7 @@ def upload_samples():
     for service in env.services:
         service.upload_sample()
 
-def upload_sample(name, where="samples/"):
+def upload_sample(name, where="samples/", additional_context=None):
     require('app_path', 'project_name')
     upload_path = '%s/%s%s.sample' % (env['app_path'], where, name)
     if files.exists(upload_path):
@@ -182,7 +182,9 @@ def upload_sample(name, where="samples/"):
     template = '%(project_name)s/' % env + name + '.template'
     if not exists(template):
         template = join(dirname(abspath(__file__)), 'templates/' + name + '.template')
-    files.upload_template(template, upload_path, env)
+    template_context = additional_context or dict()
+    template_context.update(env)
+    files.upload_template(template, upload_path, template_context)
 
 def upload_localsettings_sample():
     "Fill out localsettings template and upload as a sample."
