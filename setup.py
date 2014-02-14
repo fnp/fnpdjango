@@ -22,7 +22,7 @@ def whole_trees(package_dir, paths):
 
 setup(
     name='fnpdjango',
-    version='0.1.14',
+    version='0.1.15',
     author='Radek Czajka',
     author_email='radekczajka@nowoczesnapolska.org.pl',
     url = '',
