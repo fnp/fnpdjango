@@ -15,7 +15,7 @@ DJANGO_REQ='Django>=1.6,<1.7'
 DJANGO_ROOT='src'
 
 PYPI='http://pypi.nowoczesnapolska.org.pl/simple'
-PROJECT_TEMPLATE='http://git.nowoczesnapolska.org.pl/?p=fnpdjango.git;a=snapshot;h=95e41c888d219481622111ea0cd7f59b7c47b625;sf=tgz'
+PROJECT_TEMPLATE='http://git.nowoczesnapolska.org.pl/?p=fnpdjango.git;a=snapshot;h=project;sf=tgz'
 
 VIRTUALENVWRAPPER_PATHS="
     /etc/bash_completion.d/virtualenvwrapper
