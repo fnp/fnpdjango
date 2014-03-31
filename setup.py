@@ -22,13 +22,13 @@ def whole_trees(package_dir, paths):
 
 setup(
     name='fnpdjango',
-    version='0.1.17',
+    version='0.1.18',
     author='Radek Czajka',
     author_email='radekczajka@nowoczesnapolska.org.pl',
     url = '',
     packages=find_packages(),
     package_data={
-        'fnpdjango': whole_trees('fnpdjango', ['templates', 'locale']),
+        'fnpdjango': whole_trees('fnpdjango', ['templates', 'locale', 'static']),
         'fnpdjango.deploy': ['templates/*.template'],
         'fnpdjango.management.commands': ['babel.cfg'],
     },
