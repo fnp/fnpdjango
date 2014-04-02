@@ -1,0 +1,3 @@
+#!/bin/bash
+# Simple wrapper for running current manage.py with the right Python.
+exec %(app_path)s/ve/bin/python %(full_django_root)s/manage.py "$@"

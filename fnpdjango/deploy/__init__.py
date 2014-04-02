@@ -22,6 +22,7 @@ from subprocess import check_output
 from os.path import abspath, dirname, exists, join
 from django.utils.crypto import get_random_string
 from fabric.api import *
+from fabric.context_managers import settings
 from fabric.contrib import files
 from fabric.tasks import Task, execute
 
@@ -42,6 +43,10 @@ def setup():
         for subdir in 'releases', 'packages', 'log', 'samples':
             if not files.exists(subdir):
                 run('mkdir -p %s' % subdir, pty=True)
+        # Install helper manage.py script into root dir.
+        if not files.exists('manage.py'):
+            with settings(full_django_root=get_django_root_path('current')):
+                upload_sample('manage.py', where='', ext='', mode=0755)
     with cd('%(app_path)s/releases' % env):
         if not files.exists('current'):
             run('ln -sfT . current', pty=True)
@@ -136,7 +141,8 @@ class DebianGunicorn(Service):
         sudo('gunicorn-debian restart %s' % self.name, shell=False)
 
     def upload_sample(self):
-        upload_sample('gunicorn', additional_context = dict(django_root_path = get_django_root_path(env['release'])))
+        with settings(full_django_root=get_django_root_path('current')):
+            upload_sample('gunicorn')
 
 class Apache(Service):
     def run(self):
@@ -173,18 +179,16 @@ def upload_samples():
     for service in env.services:
         service.upload_sample()
 
-def upload_sample(name, where="samples/", additional_context=None):
+def upload_sample(name, where="samples/", ext='.sample', **kwargs):
     require('app_path', 'project_name')
-    upload_path = '%s/%s%s.sample' % (env['app_path'], where, name)
+    upload_path = '%s/%s%s%s' % (env['app_path'], where, name, ext)
     if files.exists(upload_path):
         return
     print '>>> upload %s template' % name
     template = '%(project_name)s/' % env + name + '.template'
     if not exists(template):
         template = join(dirname(abspath(__file__)), 'templates/' + name + '.template')
-    template_context = additional_context or dict()
-    template_context.update(env)
-    files.upload_template(template, upload_path, template_context)
+    files.upload_template(template, upload_path, env, **kwargs)
 
 def upload_localsettings_sample():
     "Fill out localsettings template and upload as a sample."
