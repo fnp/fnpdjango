@@ -16,6 +16,7 @@ Then set up some env properties:
     localsettings_dst_path (optional): path indicating
         where to copy the localsettings file, relative
         to django_root_path (defaults to project_name/localsettings.py)
+    migrate_fake (optional): list of (app, migration) pairs to fake-migrate
     skip_collect_static (optional): if True, Django collectstatic command is not called
 """
 from subprocess import check_output
@@ -258,6 +259,8 @@ def migrate():
     require('app_path', 'project_name')
     with cd(get_django_root_path('current')):
         run('%(app_path)s/ve/bin/python manage.py syncdb --noinput' % env, pty=True)
+        for app, migration in env.get('migrate_fake', ()):
+            run('%s/ve/bin/python manage.py migrate %s --fake %s' % (env.app_path, app, migration), pty=True)
         run('%(app_path)s/ve/bin/python manage.py migrate' % env, pty=True)
 
 def pre_collectstatic():
