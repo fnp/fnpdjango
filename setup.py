@@ -22,22 +22,17 @@ def whole_trees(package_dir, paths):
 
 setup(
     name='fnpdjango',
-    version='0.1.19-1',
+    version='0.2',
     author='Radek Czajka',
     author_email='radekczajka@nowoczesnapolska.org.pl',
     url = '',
     packages=find_packages(),
     package_data={
         'fnpdjango': whole_trees('fnpdjango', ['templates', 'locale', 'static']),
-        'fnpdjango.deploy': ['templates/*.template'],
         'fnpdjango.management.commands': ['babel.cfg'],
     },
-    scripts=[
-        'bin/git-archive-all.sh',
-        'bin/fnpdjango_bootstrap.sh',
-    ],
     install_requires=[
-        'django>=1.4,<1.7',
+        'Django>=1.4,<1.7',
         'textile==2.1.5',
     ],
     license='LICENSE',
