@@ -1,45 +1,48 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-import os.path
+import os
 from setuptools import setup, find_packages
+import sys
 
-def whole_trees(package_dir, paths):
-    def whole_tree(prefix, path):
-        files = []
-        for f in (f for f in os.listdir(os.path.join(prefix, path)) if not f[0]=='.'):
-            new_path = os.path.join(path, f)
-            if os.path.isdir(os.path.join(prefix, new_path)):
-                files.extend(whole_tree(prefix, new_path))
-            else:
-                files.append(new_path)
-        return files
-    prefix = os.path.join(os.path.dirname(__file__), package_dir)
-    files = []
-    for path in paths:
-        files.extend(whole_tree(prefix, path))
-    return files
+
+# Fabric needs Python 2.
+if sys.version_info[0] > 2:
+    from subprocess import check_call
+
+    ve = os.environ.get('VIRTUAL_ENV')
+    if not ve:
+        print('Not in virtualenv!')
+        sys.exit()
+    subve = os.path.join(ve, 'fnpdeploy_ve')
+    check_call(['virtualenv', '--python', '/usr/bin/python2.7', subve])
+    check_call([os.path.join(subve, 'bin/python')] + sys.argv)
+
+    install_requires = []
+    packages = []
+    package_data = {}
+    scripts = ['bin/fab']
+else:
+    packages = ['fnpdeploy']
+    package_data = {
+        'fnpdeploy': ['templates/*.template'],
+        }
+    scripts = ['bin/git-archive-all.sh']
+    install_requires = ['Fabric']
+
 
 setup(
-    name='fnpdjango',
-    version='0.1.19-1',
+    name='fnpdeploy',
+    version='0.1',
     author='Radek Czajka',
     author_email='radekczajka@nowoczesnapolska.org.pl',
     url = '',
-    packages=find_packages(),
-    package_data={
-        'fnpdjango': whole_trees('fnpdjango', ['templates', 'locale', 'static']),
-        'fnpdjango.deploy': ['templates/*.template'],
-        'fnpdjango.management.commands': ['babel.cfg'],
-    },
-    scripts=[
-        'bin/git-archive-all.sh',
-        'bin/fnpdjango_bootstrap.sh',
-    ],
-    install_requires=[
-        'django>=1.4,<1.7',
-        'textile==2.1.5',
-    ],
+    packages=packages,
+    package_data=package_data,
+    scripts=scripts,
+    install_requires=install_requires,
+    test_suite='nose.collector',
+    tests_require=['nose'],
     license='LICENSE',
     description='.',
     long_description="",

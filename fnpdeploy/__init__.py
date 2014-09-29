@@ -2,7 +2,7 @@
 Generic fabric deployment script.
 Create a fabfile.py in the project and start it with:
 
-    from fnpdjango.deploy import *
+    from fnpdeploy import *
 
 Then set up some env properties:
     project_name: slug-like project name
