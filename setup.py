@@ -32,10 +32,14 @@ setup(
         'fnpdjango.management.commands': ['babel.cfg'],
     },
     install_requires=[
-        'Django>=1.4,<1.7',
-        'textile==2.1.5',
+        'Django>=1.4,<1.8',
+        'textile==2.2a',
+    ],
+    dependency_links=[
+        'https://github.com/rczajka/python-textile/archive/f7a262f2a8409c8a8adb817b6a9f15f91187a527.zip#egg=textile-2.2a',
     ],
     license='LICENSE',
     description='.',
     long_description="",
+    test_suite="runtests.runtests",
 )

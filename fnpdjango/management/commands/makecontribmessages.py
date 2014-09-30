@@ -2,6 +2,8 @@
 # This file is part of FNPDjango, licensed under GNU Affero GPLv3 or later.
 # Copyright © Fundacja Nowoczesna Polska. See NOTICE for more information.
 #
+from __future__ import print_function
+
 import os
 from optparse import make_option
 from django.core.management.base import BaseCommand
@@ -13,19 +15,19 @@ class Command(BaseCommand):
         from django.conf import settings
 
         if not hasattr(settings, 'CONTRIB_LOCALE_APPS') or not settings.CONTRIB_LOCALE_APPS:
-            print "CONTRIB_LOCALE_APPS not set, no contrib locale needed."
+            print("CONTRIB_LOCALE_APPS not set, no contrib locale needed.")
             return
 
         from subprocess import call
         import babel
 
         app_names = settings.CONTRIB_LOCALE_APPS
-        print 'L10n for:', ", ".join(app_names)
+        print('L10n for:', ", ".join(app_names))
         app_dirs = [os.path.dirname(__import__(app).__file__)
                         for app in app_names]
         assert settings.LOCALE_PATHS
         locale_path = settings.LOCALE_PATHS[0]
-        print 'Using:', locale_path
+        print('Using:', locale_path)
 
         # Create the POT file.
         babel_cfg = os.path.join(locale_path,  "babel.cfg")

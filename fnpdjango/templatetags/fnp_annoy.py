@@ -13,4 +13,4 @@ def annoy():
     if getattr(settings, 'FNP_ANNOY', False):
         return template.loader.render_to_string('fnpdjango/annoy.html')
     else:
-        return u""
+        return ""
