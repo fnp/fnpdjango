@@ -26,7 +26,7 @@ setup(
     author='Radek Czajka',
     author_email='radekczajka@nowoczesnapolska.org.pl',
     url = '',
-    packages=find_packages(),
+    packages=find_packages(exclude=['tests*']),
     package_data={
         'fnpdjango': whole_trees('fnpdjango', ['templates', 'locale', 'static']),
         'fnpdjango.management.commands': ['babel.cfg'],

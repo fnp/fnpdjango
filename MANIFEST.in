@@ -1,6 +1,8 @@
 include *.txt
+include runtests.py
+include tox.ini
 recursive-include fnpdjango/static *.js *.css *.png
 recursive-include fnpdjango/templates *.html
 recursive-include fnpdjango/locale *.po *.mo
-recursive-include fnpdjango/deploy/templates *.template
 include fnpdjango/management/commands/babel.cfg
+recursive-include tests *.py
