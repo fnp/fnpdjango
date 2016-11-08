@@ -20,11 +20,11 @@ class URLLocaleMiddleware(object):
 
     def process_request(self, request):
         language = translation.get_language_from_path(request.path_info)
-        if language == settings.LANGUAGE_CODE:
-            raise Http404
         if language:
             translation.activate(language)
         request.LANGUAGE_CODE = translation.get_language()
+        if language == settings.LANGUAGE_CODE:
+            raise Http404
 
     def process_response(self, request, response):
         language = translation.get_language()
