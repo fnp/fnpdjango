@@ -15,12 +15,12 @@
     title="{% trans 'Share on Twitter' %}">
     <img src="{% static "img/social/"|add:iconset|add:"twitter.png" %}"
         alt="{% trans 'Share on Twitter' %}"></a>
+{% comment %}
 <a rel="nofollow" target="_blank" class="nk"
     href="http://nk.pl/#sledzik?shout={{ encoded_desc }}%20{{ encoded_url }}"
     title="{% trans 'Share on NK.pl' %}">
     <img src="{% static "img/social/"|add:iconset|add:"nk.png" %}"
         alt="{% trans 'Share on NK.pl' %}"></a>
-{% comment %}
 <a rel="nofollow" target="_blank" class="diaspora"
     href="http://sharetodiaspora.github.com/?title={{ encoded_desc }}&amp;url={{ encoded_url }}"
     title="{% trans 'Share on Diaspora' %}">

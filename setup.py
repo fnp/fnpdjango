@@ -23,7 +23,7 @@ def whole_trees(package_dir, paths):
 
 setup(
     name='fnpdjango',
-    version='0.2.3',
+    version='0.2.4',
     author='Radek Czajka',
     author_email='radekczajka@nowoczesnapolska.org.pl',
     url='',
@@ -33,11 +33,8 @@ setup(
         'fnpdjango.management.commands': ['babel.cfg'],
     },
     install_requires=[
-        'Django>=1.4,<1.10',
-        'textile==2.2a',
-    ],
-    dependency_links=[
-        'https://github.com/rczajka/python-textile/archive/f7a262f2a8409c8a8adb817b6a9f15f91187a527.zip#egg=textile-2.2a',
+        'Django>=1.4,<1.11',
+        'textile==2.3.7',
     ],
     license='LICENSE',
     description='.',
