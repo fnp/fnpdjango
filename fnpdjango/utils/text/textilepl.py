@@ -16,6 +16,5 @@ def textile_pl(text):
 
 
 def textile_restricted_pl(text):
-    return TextilePL(restricted=True, lite=True,
-                   noimage=True, auto_link=False).parse(
-                        text, rel='nofollow')
+    return TextilePL(restricted=True, lite=True, noimage=True).parse(
+        text, rel='nofollow')
