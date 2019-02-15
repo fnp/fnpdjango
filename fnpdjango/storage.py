@@ -19,7 +19,7 @@ class BofhStorageMixin(FileSystemStorage):
     and for sane caching settings.
 
     """
-    def get_available_name(self, name):
+    def get_available_name(self, name, max_length=None):
         if self.exists(name):
             self.delete(name)
         return name

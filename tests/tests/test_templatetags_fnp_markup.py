@@ -4,18 +4,9 @@
 #
 from __future__ import unicode_literals
 
-import sys
 from django.test import TestCase
 
-try:
-    from unittest import skipIf
-except ImportError:
-    # Don't need skipping for Python2.6.
-    skipIf = lambda expr, comment: lambda test: test
 
-
-@skipIf(sys.version_info[:2] == (3, 2),
-    "No usable python-textile for Python 3.2.")
 class TemplatetagsFNPMarkupTestCase(TestCase):
 
     def test_textile_en(self):

@@ -41,7 +41,20 @@ if not settings.configured and not os.environ.get('DJANGO_SETTINGS_MODULE'):
         ],
         LANGUAGE_CODE='pl',
         MEDIA_ROOT=media_root,
+        MIDDLEWARE_CLASSES=[
+            'django.middleware.common.CommonMiddleware',
+            'fnpdjango.middleware.URLLocaleMiddleware',
+            'fnpdjango.middleware.SetRemoteAddrFromXRealIP',
+        ],
+        FNPDJANGO_REALIP = True,
+        ROOT_URLCONF='tests.urls',
+        TEMPLATES=[
+            {
+                'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            },
+        ],
         TEST_LAZY_UGETTEXT_LAZY=_("Lazy setting."),
+        USE_I18N=True,
     )
 else:
     media_root = None
