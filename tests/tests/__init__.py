@@ -10,6 +10,7 @@ test_* modules by itself.
 """
 from .test_middleware import *
 from .test_storage import *
+from .test_templatetags_fnp_annoy import *
 from .test_templatetags_fnp_markup import *
 from .test_templatetags_macros import *
 from .test_utils_settings import *
