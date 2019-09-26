@@ -3,6 +3,12 @@
 This document records all notable changes to fnpdjango.
 
 
+## 0.4.1 (2019-09-27)
+
+- Make `utils.settings.LazyUGettextLazy` a `django.utils.functional.Promise`
+  so it deconstructs nicely.
+
+
 ## 0.4 (2019-04-03)
 
 - Support for Django up to 2.2.

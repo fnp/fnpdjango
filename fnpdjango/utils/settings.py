@@ -2,6 +2,7 @@
 Utilities for global settings.
 """
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils.functional import Promise
 
 # Use Python3 str.
 try:
@@ -13,7 +14,7 @@ else:
 
 
 @python_2_unicode_compatible
-class LazyUGettextLazy(object):
+class LazyUGettextLazy(Promise):
     """You can use it to internationalize strings in settings.
 
     Just import this class as gettext.
