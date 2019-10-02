@@ -3,6 +3,11 @@
 This document records all notable changes to fnpdjango.
 
 
+## 0.4.2 (2019-10-02)
+
+- Make textile import optional when loading template tags.
+
+
 ## 0.4.1 (2019-09-27)
 
 - Make `utils.settings.LazyUGettextLazy` a `django.utils.functional.Promise`
