@@ -3,7 +3,7 @@
 This document records all notable changes to fnpdjango.
 
 
-## 0.4.2 (2019-10-02)
+## 0.4.3 (2019-10-02)
 
 - Make textile import optional when loading template tags.
 
