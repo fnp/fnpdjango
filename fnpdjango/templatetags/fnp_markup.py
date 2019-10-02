@@ -1,4 +1,9 @@
-import textile
+try:
+    import textile
+except ImportError:
+    # This is optional.
+    pass
+
 from django import template
 from django.utils.safestring import mark_safe
 from ..utils.text import textilepl
