@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 import csv
 from django.http import HttpResponse
+from django.utils.translation import ugettext_lazy as _
 
 try:
     unicode
@@ -12,7 +13,7 @@ else:
     str = unicode
 
 
-def export_as_csv_action(description="Export selected objects as CSV file", fields=None, exclude=None, header=True):
+def export_as_csv_action(description=_("Export selected objects as CSV file"), fields=None, exclude=None, header=True):
     """
     This function returns an export csv action
     'fields' and 'exclude' work like in django ModelForm
@@ -24,14 +25,9 @@ def export_as_csv_action(description="Export selected objects as CSV file", fiel
         based on http://djangosnippets.org/snippets/1697/
         """
         opts = modeladmin.model._meta
-        field_names = [field.name for field in opts.fields]
+        field_names = fields or [field.name for field in opts.fields]
 
-        if fields:
-            for f in fields:
-                if f not in field_names:
-                    field_names.append(f)
-
-        elif exclude:
+        if exclude:
             field_names = [f for f in field_names if f not in exclude]
 
         response = HttpResponse(content_type='text/csv')
@@ -42,7 +38,13 @@ def export_as_csv_action(description="Export selected objects as CSV file", fiel
         if header:
             writer.writerow(field_names)
         for obj in queryset:
-            writer.writerow([str(getattr(obj, field)) for field in field_names])
+            row = []
+            for field in field_names:
+                value = getattr(obj, field)
+                if callable(value):
+                    value = value()
+                row.append(str(value))
+            writer.writerow(row)
 
         return response
 
