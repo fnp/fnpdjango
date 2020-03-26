@@ -2,6 +2,11 @@
 
 This document records all notable changes to fnpdjango.
 
+## 0.4.4 (2020-03-26)
+
+- Support for Django up do 3.0.
+- Added `actions.export_as_csv_action`.
+
 
 ## 0.4.3 (2019-10-02)
 

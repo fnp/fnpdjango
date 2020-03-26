@@ -8,6 +8,7 @@ in Django<1.6.  The newer django.test.runner.DiscoverRunner finds
 test_* modules by itself.
 
 """
+from .test_actions import *
 from .test_middleware import *
 from .test_storage import *
 from .test_templatetags_fnp_annoy import *

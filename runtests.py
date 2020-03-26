@@ -28,11 +28,15 @@ if not settings.configured and not os.environ.get('DJANGO_SETTINGS_MODULE'):
         DATABASES={
             'default': {
                 'ENGINE': 'django.db.backends.sqlite3',
+
+                'NAME': 'test.db',
             }
         },
         INSTALLED_APPS=[
+            'django.contrib.admin',
             'django.contrib.auth',
             'django.contrib.contenttypes',
+            'django.contrib.messages',
             'django.contrib.sessions',
             'django.contrib.sites',
 
@@ -46,11 +50,17 @@ if not settings.configured and not os.environ.get('DJANGO_SETTINGS_MODULE'):
             'django.middleware.common.CommonMiddleware',
             'fnpdjango.middleware.URLLocaleMiddleware',
             'fnpdjango.middleware.SetRemoteAddrFromXRealIP',
+            'django.contrib.sessions.middleware.SessionMiddleware',
+            'django.contrib.auth.middleware.AuthenticationMiddleware',
+            'django.contrib.messages.middleware.MessageMiddleware',
         ],
         MIDDLEWARE=[
             'django.middleware.common.CommonMiddleware',
             'fnpdjango.middleware.URLLocaleMiddleware',
             'fnpdjango.middleware.SetRemoteAddrFromXRealIP',
+            'django.contrib.sessions.middleware.SessionMiddleware',
+            'django.contrib.auth.middleware.AuthenticationMiddleware',
+            'django.contrib.messages.middleware.MessageMiddleware',
         ],
         FNPDJANGO_REALIP = True,
         ROOT_URLCONF='tests.urls',
@@ -58,10 +68,20 @@ if not settings.configured and not os.environ.get('DJANGO_SETTINGS_MODULE'):
             {
                 'BACKEND': 'django.template.backends.django.DjangoTemplates',
                 'APP_DIRS': True,
+                'OPTIONS': {
+                    'context_processors': [
+                        'django.contrib.auth.context_processors.auth',
+                        'django.contrib.messages.context_processors.messages',
+                    ]
+                }
             },
         ],
         TEST_LAZY_UGETTEXT_LAZY=_("Lazy setting."),
         USE_I18N=True,
+
+        SECRET_KEY='x',
+        DEBUG=True,
+        SITE_ID=1,
     )
 else:
     media_root = None
