@@ -1,9 +1,6 @@
-# -*- coding: utf-8 -*-
 # This file is part of FNPDjango, licensed under GNU Affero GPLv3 or later.
 # Copyright © Fundacja Nowoczesna Polska. See README.md for more information.
 #
-from __future__ import unicode_literals
-
 from tempfile import NamedTemporaryFile
 from django.core.files.base import ContentFile
 from django.test import TestCase

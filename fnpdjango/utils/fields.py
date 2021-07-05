@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from django.forms import CharField, ValidationError
 from .text.textilepl import textile_pl
 

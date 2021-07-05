@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 #
 import os.path
 from setuptools import setup, find_packages
@@ -23,7 +22,7 @@ def whole_trees(package_dir, paths):
 
 setup(
     name='fnpdjango',
-    version='0.4.5',
+    version='0.5',
     author='Radek Czajka',
     author_email='radekczajka@nowoczesnapolska.org.pl',
     url='',
@@ -33,7 +32,7 @@ setup(
         'fnpdjango.management.commands': ['babel.cfg'],
     },
     install_requires=[
-        'Django>=1.4,<3.1',
+        'Django>=1.11,<4.0',
     ],
     extras_require={
         'textile': [

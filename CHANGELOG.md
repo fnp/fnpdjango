@@ -2,6 +2,16 @@
 
 This document records all notable changes to fnpdjango.
 
+## 0.5 (2021-07-05)
+
+- Support for Django up to 3.2.
+- Dropped support for Django < 1.11 and Python < 3.6.
+- GzipPipelineCachedStorage replaced by GzipPipelineManifestStorage
+- Removed `utils.urls.i18n_patterns` and `URLLocaleMiddleware` in favor
+  of stock `i18n_patterns(prefix_default_language=False) and
+  `LocaleMiddleware`.
+
+
 ## 0.4.5 (2020-03-26)
 
 - Support for Django up do 3.0.

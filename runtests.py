@@ -1,13 +1,10 @@
 #!/usr/bin/env python
-# -*- coding: utf-8
 # This file is part of FNPDjango, licensed under GNU Affero GPLv3 or later.
 # Copyright © Fundacja Nowoczesna Polska. See README.md for more information.
 #
 """
 Creates a simple Django configuration and runs tests for fnpdjango.
 """
-from __future__ import unicode_literals
-
 import sys
 import os
 from os.path import dirname, abspath
@@ -39,6 +36,7 @@ if not settings.configured and not os.environ.get('DJANGO_SETTINGS_MODULE'):
             'django.contrib.messages',
             'django.contrib.sessions',
             'django.contrib.sites',
+            'django.contrib.staticfiles',
 
             'fnpdjango',
             'tests',
@@ -46,17 +44,10 @@ if not settings.configured and not os.environ.get('DJANGO_SETTINGS_MODULE'):
         LANGUAGE_CODE='pl',
         MEDIA_ROOT=media_root,
         STATIC_URL='/static/',
-        MIDDLEWARE_CLASSES=[    # Django <= 1.9
-            'django.middleware.common.CommonMiddleware',
-            'fnpdjango.middleware.URLLocaleMiddleware',
-            'fnpdjango.middleware.SetRemoteAddrFromXRealIP',
-            'django.contrib.sessions.middleware.SessionMiddleware',
-            'django.contrib.auth.middleware.AuthenticationMiddleware',
-            'django.contrib.messages.middleware.MessageMiddleware',
-        ],
+        STATIC_ROOT='./static/',
+        STATICFILES_STORAGE = 'fnpdjango.pipeline_storage.GzipPipelineManifestStorage',
         MIDDLEWARE=[
             'django.middleware.common.CommonMiddleware',
-            'fnpdjango.middleware.URLLocaleMiddleware',
             'fnpdjango.middleware.SetRemoteAddrFromXRealIP',
             'django.contrib.sessions.middleware.SessionMiddleware',
             'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -82,15 +73,13 @@ if not settings.configured and not os.environ.get('DJANGO_SETTINGS_MODULE'):
         SECRET_KEY='x',
         DEBUG=True,
         SITE_ID=1,
+
+        PIPELINE={}
     )
 else:
     media_root = None
 
-try:
-    from django.test.runner import DiscoverRunner
-except ImportError:
-    # Django < 1.6
-    from django.test.simple import DjangoTestSuiteRunner as DiscoverRunner
+from django.test.runner import DiscoverRunner
 
 
 def runtests(*test_args, **kwargs):
@@ -100,13 +89,8 @@ def runtests(*test_args, **kwargs):
     parent = dirname(abspath(__file__))
     sys.path.insert(0, parent)
 
-    # For Django 1.7+
-    try:
-        from django import setup
-    except ImportError:
-        pass
-    else:
-        setup()
+    from django import setup
+    setup()
 
     test_runner = DiscoverRunner(
         verbosity=kwargs.get('verbosity', 1),

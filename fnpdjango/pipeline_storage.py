@@ -1,6 +1,7 @@
 from pipeline.storage import GZIPMixin
-from pipeline.storage import PipelineCachedStorage
+from pipeline.storage import PipelineManifestStorage
 
-class GzipPipelineCachedStorage(GZIPMixin, PipelineCachedStorage):
+
+class GzipPipelineManifestStorage(GZIPMixin, PipelineManifestStorage):
     pass
 

@@ -1,10 +1,5 @@
 from django.conf import settings
-
-try:
-    from django.urls import resolve, reverse, Resolver404
-except ImportError:
-    from django.core.urlresolvers import resolve, reverse, Resolver404
-
+from django.urls import resolve, reverse, Resolver404
 from django import template
 from django.utils import translation
 from ..utils.views import get_current_object

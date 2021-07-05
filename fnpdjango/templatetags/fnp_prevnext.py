@@ -1,10 +1,6 @@
 from copy import copy
+from urllib.parse import urlencode
 from django.template import Library
-
-try:
-    from urllib.parse import urlencode
-except ImportError:
-    from urllib import urlencode
 
 
 register = Library()
