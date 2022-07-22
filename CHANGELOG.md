@@ -2,6 +2,12 @@
 
 This document records all notable changes to fnpdjango.
 
+## 0.6 (2022-07-22)
+
+- Support for Django up to 4.0.
+- Drop support for Django 1.11.
+
+
 ## 0.5 (2021-07-05)
 
 - Support for Django up to 3.2.

@@ -1,7 +1,7 @@
 # Source: https://gist.github.com/jeremyjbowers/e8d007446155c12033e6
 import csv
 from django.http import HttpResponse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
 def export_as_csv_action(description=_("Export selected objects as CSV file"), fields=None, exclude=None, header=True):

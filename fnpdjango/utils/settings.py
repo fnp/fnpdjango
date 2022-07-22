@@ -17,8 +17,8 @@ class LazyUGettextLazy(Promise):
 
     def __str__(self):
         if not self.real:
-            from django.utils.translation import ugettext_lazy
-            LazyUGettextLazy._ = staticmethod(ugettext_lazy)
+            from django.utils.translation import gettext_lazy
+            LazyUGettextLazy._ = staticmethod(gettext_lazy)
             LazyUGettextLazy.real = True
         return str(self._(self.text))
 
