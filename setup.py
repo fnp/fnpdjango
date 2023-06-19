@@ -22,7 +22,7 @@ def whole_trees(package_dir, paths):
 
 setup(
     name='fnpdjango',
-    version='0.6',
+    version='0.7',
     author='Radek Czajka',
     author_email='radekczajka@nowoczesnapolska.org.pl',
     url='',
@@ -32,11 +32,11 @@ setup(
         'fnpdjango.management.commands': ['babel.cfg'],
     },
     install_requires=[
-        'Django>=1.11,<4.1',
+        'Django>=2.0,<5.0',
     ],
     extras_require={
         'textile': [
-            'textile==2.3.16',
+            'textile>=4.0.2',
         ],
         'pipeline': [
             'pipeline',
