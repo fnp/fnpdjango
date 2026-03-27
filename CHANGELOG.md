@@ -2,6 +2,12 @@
 
 This document records all notable changes to fnpdjango.
 
+## Unreleased
+
+- Add support for Django 5 and 6.
+- Replace removed lazy string helpers in model utilities.
+- Update the test settings to use `STORAGES` for modern Django versions.
+
 ## 0.6 (2022-07-22)
 
 - Support for Django up to 4.0.

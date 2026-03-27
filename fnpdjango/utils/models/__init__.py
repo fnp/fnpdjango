@@ -2,7 +2,10 @@
 Utilities for Django models.
 """
 
-from django.utils.translation import string_concat
+from django.utils.functional import lazy
+
+
+concat_lazy = lazy(lambda *args: ''.join(str(arg) for arg in args), str)
 
 
 def filtered_model(name, model, field, value, verbose_extra=None):
@@ -11,10 +14,8 @@ def filtered_model(name, model, field, value, verbose_extra=None):
     class  Meta:
         proxy = True
         app_label = model._meta.app_label
-        verbose_name = string_concat(model._meta.verbose_name,
-            ': ', verbose_extra)
-        verbose_name_plural = string_concat(model._meta.verbose_name_plural,
-            ': ', verbose_extra)
+        verbose_name = concat_lazy(model._meta.verbose_name, ': ', verbose_extra)
+        verbose_name_plural = concat_lazy(model._meta.verbose_name_plural, ': ', verbose_extra)
 
     def save(self, *args, **kwargs):
         if not getattr(self, field):
