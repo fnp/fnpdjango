@@ -11,6 +11,7 @@ from os.path import dirname, abspath
 from optparse import OptionParser
 from shutil import rmtree
 
+from django import VERSION as DJANGO_VERSION
 from django.conf import settings
 from fnpdjango.utils.settings import LazyUGettextLazy as _
 
@@ -20,8 +21,10 @@ from fnpdjango.utils.settings import LazyUGettextLazy as _
 if not settings.configured and not os.environ.get('DJANGO_SETTINGS_MODULE'):
     import tempfile
     media_root = tempfile.mkdtemp(prefix='djangotest_')
+    static_root = tempfile.mkdtemp(prefix='djangostatic_')
+    staticfiles_storage = 'fnpdjango.pipeline_storage.GzipPipelineManifestStorage'
 
-    settings.configure(
+    configured_settings = dict(
         DATABASES={
             'default': {
                 'ENGINE': 'django.db.backends.sqlite3',
@@ -44,8 +47,7 @@ if not settings.configured and not os.environ.get('DJANGO_SETTINGS_MODULE'):
         LANGUAGE_CODE='pl',
         MEDIA_ROOT=media_root,
         STATIC_URL='/static/',
-        STATIC_ROOT='./static/',
-        STATICFILES_STORAGE = 'fnpdjango.pipeline_storage.GzipPipelineManifestStorage',
+        STATIC_ROOT=static_root,
         MIDDLEWARE=[
             'django.middleware.common.CommonMiddleware',
             'fnpdjango.middleware.SetRemoteAddrFromXRealIP',
@@ -61,6 +63,7 @@ if not settings.configured and not os.environ.get('DJANGO_SETTINGS_MODULE'):
                 'APP_DIRS': True,
                 'OPTIONS': {
                     'context_processors': [
+                        'django.template.context_processors.request',
                         'django.contrib.auth.context_processors.auth',
                         'django.contrib.messages.context_processors.messages',
                     ]
@@ -73,11 +76,27 @@ if not settings.configured and not os.environ.get('DJANGO_SETTINGS_MODULE'):
         SECRET_KEY='x',
         DEBUG=True,
         SITE_ID=1,
+        DEFAULT_AUTO_FIELD='django.db.models.AutoField',
 
         PIPELINE={}
     )
+
+    if DJANGO_VERSION < (4, 2):
+        configured_settings['STATICFILES_STORAGE'] = staticfiles_storage
+    else:
+        configured_settings['STORAGES'] = {
+            'default': {
+                'BACKEND': 'django.core.files.storage.FileSystemStorage',
+            },
+            'staticfiles': {
+                'BACKEND': staticfiles_storage,
+            },
+        }
+
+    settings.configure(**configured_settings)
 else:
     media_root = None
+    static_root = None
 
 from django.test.runner import DiscoverRunner
 
@@ -90,15 +109,23 @@ def runtests(*test_args, **kwargs):
     sys.path.insert(0, parent)
 
     from django import setup
+    from django.core.management import call_command
     setup()
 
-    test_runner = DiscoverRunner(
-        verbosity=kwargs.get('verbosity', 1),
-        interactive=kwargs.get('interactive', False),
-        failfast=kwargs.get('failfast'))
-    failures = test_runner.run_tests(test_args)
-    if media_root:
-        rmtree(media_root)
+    if static_root:
+        call_command('collectstatic', interactive=False, verbosity=0)
+
+    try:
+        test_runner = DiscoverRunner(
+            verbosity=kwargs.get('verbosity', 1),
+            interactive=kwargs.get('interactive', False),
+            failfast=kwargs.get('failfast'))
+        failures = test_runner.run_tests(test_args)
+    finally:
+        if media_root:
+            rmtree(media_root)
+        if static_root:
+            rmtree(static_root)
     sys.exit(failures)
 
 if __name__ == '__main__':

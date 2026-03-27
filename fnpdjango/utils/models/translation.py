@@ -5,7 +5,11 @@ Utilities for creating multilingual fields in your apps.
 from copy import copy
 from django.conf import settings
 from django.db import models
-from django.utils.translation import get_language, string_concat
+from django.utils.functional import lazy
+from django.utils.translation import get_language
+
+
+concat_lazy = lazy(lambda *args: ''.join(str(arg) for arg in args), str)
 
 
 def localize_field(name, lang=None):
@@ -33,7 +37,7 @@ def add_translatable(model, fields, languages=None):
         for lang_code, lang_name in languages:
             new_field = copy(field)
             if field.verbose_name:
-                new_field.verbose_name = string_concat(field.verbose_name, ' [%s]' % lang_code)
+                new_field.verbose_name = concat_lazy(field.verbose_name, ' [%s]' % lang_code)
             new_field.contribute_to_class(model, localize_field(name, lang_code))
         setattr(model, name, field_getter(name))
         # add setter?

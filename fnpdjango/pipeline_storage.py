@@ -4,4 +4,3 @@ from pipeline.storage import PipelineManifestStorage
 
 class GzipPipelineManifestStorage(GZIPMixin, PipelineManifestStorage):
     pass
-

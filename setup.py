@@ -32,14 +32,14 @@ setup(
         'fnpdjango.management.commands': ['babel.cfg'],
     },
     install_requires=[
-        'Django>=1.11,<4.1',
+        'Django>=1.11,<7',
     ],
     extras_require={
         'textile': [
             'textile==2.3.16',
         ],
         'pipeline': [
-            'pipeline',
+            'django-pipeline',
         ],
     },
     license='LICENSE',
