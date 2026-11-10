@@ -2,6 +2,10 @@
 
 This document records all notable changes to fnpdjango.
 
+## 0.8 (2026-11-10)
+
+- Testing for Django up to 6.1.
+
 ## 0.7 (2023-06-19)
 
 - Testing for Django up to 4.2.
